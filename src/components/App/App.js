@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from '@wix/wix-i18n-config';
 import s from './App.scss';
+
+import DataHooks from './DataHooks';
 
 import {
   Page,
@@ -19,20 +19,60 @@ import {
   Text,
 } from 'wix-style-react';
 
-class App extends React.Component {
-  static propTypes = {
-    t: PropTypes.func,
-  };
+const colors = [
+  { id: 0, value: 'Red' },
+  { id: 1, value: 'Blue' },
+  { id: 2, value: 'Green' },
+  { id: 3, value: 'Yellow' },
+  { id: 4, value: 'Pink' },
+];
+
+const getColorItemById = (id) => colors.find((color) => color.id === id);
+
+const ActionsBar = ({ disabled, onClearClicked, onSubmitClicked }) => (
+  <Box>
+    <Box marginRight="12px">
+      <Button
+        dataHook={DataHooks.CLEAR_BUTTON}
+        priority="secondary"
+        onClick={onClearClicked}
+      >
+        Clear
+      </Button>
+    </Box>
+    <Button
+      dataHook={DataHooks.SUBMIT_BUTTON}
+      disabled={disabled}
+      onClick={onSubmitClicked}
+    >
+      Submit
+    </Button>
+  </Box>
+);
+
+export default class App extends React.Component {
+  constructor(){
+    super();
+    this.state ={
+      // ...this.getClearedFormState(),
+      submittedValues: null,
+    }
+  }
 
   render() {
-    const { t } = this.props;
-
     return (
-      <Page>
-        <Page.Header title="WSR Form" />
+      <Page height ="100vh">
+        <Page.Header
+              title="WSR Form"
+              actionsBar={
+                <ActionsBar
+                      // onClearClicked={this.clearForm}
+                      // onSubmitClicked={this.submitForm}
+                      // disabled={!this.isFormValid()}
+                />
+              }
+        />
       </Page>
     );
   }
 }
-
-export default withTranslation()(App);
